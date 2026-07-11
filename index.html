@@ -397,6 +397,21 @@
     outline: none;
     border-color: var(--on-dark);
   }
+  .chat-input-row select {
+    width: 100%;
+    height: 48px;
+    padding: 12px 16px;
+    background: var(--surface-card);
+    border: 1px solid var(--hairline);
+    color: var(--on-dark);
+    font-size: 14px;
+    font-family: inherit;
+    color-scheme: dark;
+  }
+  .chat-input-row select:focus {
+    outline: none;
+    border-color: var(--on-dark);
+  }
   .chat-checkbox {
     display: flex;
     align-items: center;
@@ -458,6 +473,14 @@
         <label class="chat-checkbox">
           <input type="checkbox" id="timeUnknown"> 태어난 시간 모름
         </label>
+        <div>
+          <span class="chat-field-label">성별</span>
+          <select id="genderSelect">
+            <option value="">선택 안 함</option>
+            <option value="male">남성</option>
+            <option value="female">여성</option>
+          </select>
+        </div>
         <button id="chatSubmitBtn" class="btn">사주 분석하기</button>
       </div>
     </div>
@@ -640,6 +663,7 @@ async function runDraw(weights) {
   addHistory(main, bonus);
   btn.disabled = false;
   btn.textContent = '번호 추첨하기';
+  return { main, bonus };
 }
 
 btn.addEventListener('click', () => runDraw());
@@ -791,6 +815,25 @@ const chatSubmitBtn = document.getElementById('chatSubmitBtn');
 const birthDateInput = document.getElementById('birthDate');
 const birthTimeInput = document.getElementById('birthTime');
 const timeUnknownInput = document.getElementById('timeUnknown');
+const genderSelect = document.getElementById('genderSelect');
+
+function stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html.replace(/<br\s*\/?>/gi, '\n');
+  return tmp.textContent.trim();
+}
+
+async function saveDraw(payload) {
+  try {
+    await fetch('/api/save-draw', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    /* non-critical: saving history should never break the UI */
+  }
+}
 
 function addBotMessage(html) {
   const el = document.createElement('div');
@@ -868,7 +911,23 @@ chatSubmitBtn.addEventListener('click', async () => {
   await wait(900);
   chatOverlay.classList.remove('open');
   ballsEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  await runDraw(weights);
+  const { main, bonus } = await runDraw(weights);
+
+  saveDraw({
+    birthDate: dateStr,
+    birthTime: timeUnknown ? null : timeStr,
+    timeUnknown,
+    gender: genderSelect.value || null,
+    yearPillar: pillarText(saju.year),
+    monthPillar: pillarText(saju.month),
+    dayPillar: pillarText(saju.day),
+    hourPillar: saju.hour ? pillarText(saju.hour) : null,
+    dominant: saju.dominant,
+    weakest: saju.weakest,
+    analysisText: stripHtml(analysisHtml),
+    mainNumbers: main,
+    bonusNumber: bonus
+  });
 
   chatSubmitBtn.disabled = false;
 });
