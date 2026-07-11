@@ -34,7 +34,7 @@
     background: var(--canvas);
     font-family: "BMWTypeNextLatin", "Inter", -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
     color: var(--on-dark);
-    padding: 40px 24px;
+    padding: 40px 24px 220px;
     overflow-x: hidden;
     position: relative;
   }
@@ -94,10 +94,6 @@
     background: var(--m-red);
     box-shadow: 0 0 18px 4px rgba(226,39,24,0.75);
   }
-  .light.go {
-    background: var(--surface-card);
-    box-shadow: none;
-  }
 
   .status {
     font-size: 14px;
@@ -130,6 +126,7 @@
     flex-wrap: wrap;
     justify-content: center;
     max-width: 620px;
+    scroll-margin-top: 40px;
   }
 
   .plus {
@@ -169,12 +166,12 @@
     100% { transform: scale(1); box-shadow: none; }
   }
 
-  button#drawBtn {
-    margin-top: 48px;
+  .btn {
     padding: 16px 40px;
     height: 48px;
     display: flex;
     align-items: center;
+    justify-content: center;
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 1.5px;
@@ -185,9 +182,12 @@
     color: var(--on-dark);
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
+    font-family: inherit;
   }
-  button#drawBtn:hover:not(:disabled) { background: var(--on-dark); color: var(--canvas); }
-  button#drawBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn:hover:not(:disabled) { background: var(--on-dark); color: var(--canvas); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  #drawBtn { margin-top: 48px; }
 
   .history {
     margin-top: 56px;
@@ -253,6 +253,153 @@
     30%, 50%, 70% { transform: translateX(-4px); }
     40%, 60% { transform: translateX(4px); }
   }
+
+  /* --- chatbot launcher card --- */
+  .chatbot-launcher {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 260px;
+    background: var(--surface-card);
+    border: 1px solid var(--hairline);
+    padding: 24px;
+    z-index: 40;
+  }
+  .chatbot-title {
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .chatbot-prompt {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--body);
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  .chatbot-launcher .btn { width: 100%; padding: 16px 0; }
+
+  /* --- chat overlay / panel --- */
+  .chat-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    align-items: center;
+    justify-content: center;
+    z-index: 60;
+    padding: 24px;
+  }
+  .chat-overlay.open { display: flex; }
+
+  .chat-panel {
+    width: min(440px, 100%);
+    max-height: 82vh;
+    background: var(--canvas);
+    border: 1px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--hairline);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .chat-header .stripe-mini {
+    width: 32px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--m-blue-light), var(--m-blue-dark), var(--m-red));
+  }
+  .chat-close {
+    background: none;
+    border: none;
+    color: var(--on-dark);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .msg {
+    max-width: 88%;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.6;
+    border: 1px solid var(--hairline);
+  }
+  .msg.bot {
+    align-self: flex-start;
+    background: var(--surface-card);
+  }
+  .msg.user {
+    align-self: flex-end;
+    background: var(--surface-elevated);
+    font-weight: 400;
+  }
+  .msg b { font-weight: 700; }
+
+  .chat-input-row {
+    padding: 20px;
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .chat-field-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .chat-input-row input[type="date"],
+  .chat-input-row input[type="time"] {
+    width: 100%;
+    height: 48px;
+    padding: 12px 16px;
+    background: var(--surface-card);
+    border: 1px solid var(--hairline);
+    color: var(--on-dark);
+    font-size: 14px;
+    font-family: inherit;
+    color-scheme: dark;
+  }
+  .chat-input-row input[type="date"]:focus,
+  .chat-input-row input[type="time"]:focus {
+    outline: none;
+    border-color: var(--on-dark);
+  }
+  .chat-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--body);
+    font-weight: 300;
+  }
+
+  @media (max-width: 480px) {
+    .chatbot-launcher { left: 16px; right: 16px; width: auto; bottom: 16px; }
+  }
 </style>
 </head>
 <body>
@@ -268,11 +415,43 @@
 
   <div class="balls" id="balls"></div>
 
-  <button id="drawBtn">번호 추첨하기</button>
+  <button id="drawBtn" class="btn">번호 추첨하기</button>
 
   <div class="history">
     <div class="history-label">Recent Draws</div>
     <div id="historyList"></div>
+  </div>
+
+  <!-- chatbot launcher -->
+  <div class="chatbot-launcher">
+    <div class="chatbot-title">M Chatbot</div>
+    <div class="chatbot-prompt">생년월일과 태어난 시간으로 사주를 분석해 행운 번호를 추천해드려요.</div>
+    <button id="chatOpenBtn" class="btn">사주 상담 시작</button>
+  </div>
+
+  <!-- chat overlay -->
+  <div class="chat-overlay" id="chatOverlay">
+    <div class="chat-panel">
+      <div class="chat-header">
+        <span>M Chatbot &middot; 사주 번호 분석</span>
+        <button class="chat-close" id="chatCloseBtn">&times;</button>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-row">
+        <div>
+          <span class="chat-field-label">생년월일</span>
+          <input type="date" id="birthDate">
+        </div>
+        <div>
+          <span class="chat-field-label">태어난 시간</span>
+          <input type="time" id="birthTime">
+        </div>
+        <label class="chat-checkbox">
+          <input type="checkbox" id="timeUnknown"> 태어난 시간 모름
+        </label>
+        <button id="chatSubmitBtn" class="btn">사주 분석하기</button>
+      </div>
+    </div>
   </div>
 
 <script>
@@ -346,19 +525,6 @@ async function spinBall(el, finalValue, ticks) {
   await wait(50);
 }
 
-/* ---------- draw logic ---------- */
-function drawNumbers() {
-  const pool = Array.from({ length: 45 }, (_, i) => i + 1);
-  const picked = [];
-  for (let i = 0; i < 7; i++) {
-    const idx = Math.floor(Math.random() * pool.length);
-    picked.push(pool.splice(idx, 1)[0]);
-  }
-  const main = picked.slice(0, 6).sort((a, b) => a - b);
-  const bonus = picked[6];
-  return { main, bonus };
-}
-
 function buildBallSlots(container, count) {
   container.innerHTML = '';
   const slots = [];
@@ -404,12 +570,30 @@ function addHistory(main, bonus) {
   }
 }
 
+/* ---------- weighted draw ---------- */
+function weightedPick(weights, count) {
+  const pool = weights.map((w, i) => ({ n: i + 1, w }));
+  const result = [];
+  for (let k = 0; k < count; k++) {
+    const total = pool.reduce((s, p) => s + p.w, 0);
+    let r = Math.random() * total;
+    let idx = 0;
+    for (; idx < pool.length - 1; idx++) {
+      r -= pool[idx].w;
+      if (r <= 0) break;
+    }
+    result.push(pool[idx].n);
+    pool.splice(idx, 1);
+  }
+  return result;
+}
+
 const btn = document.getElementById('drawBtn');
 const statusEl = document.getElementById('status');
 const ballsEl = document.getElementById('balls');
 const flashEl = document.getElementById('flash');
 
-btn.addEventListener('click', async () => {
+async function runDraw(weights) {
   btn.disabled = true;
   btn.textContent = '추첨 중...';
   ballsEl.innerHTML = '';
@@ -424,7 +608,10 @@ btn.addEventListener('click', async () => {
   statusEl.classList.add('live');
   statusEl.innerHTML = '<span class="dot"></span>추첨 진행 중';
 
-  const { main, bonus } = drawNumbers();
+  const w = weights || new Array(45).fill(1);
+  const picked = weightedPick(w, 7);
+  const main = picked.slice(0, 6).sort((a, b) => a - b);
+  const bonus = picked[6];
   const slots = buildBallSlots(ballsEl, 7);
 
   for (let i = 0; i < 6; i++) {
@@ -444,6 +631,237 @@ btn.addEventListener('click', async () => {
   addHistory(main, bonus);
   btn.disabled = false;
   btn.textContent = '번호 추첨하기';
+}
+
+btn.addEventListener('click', () => runDraw());
+
+/* =====================================================
+   사주(四柱) 분석 - 챗봇
+   ===================================================== */
+const STEMS = ['갑','을','병','정','무','기','경','신','임','계'];
+const STEMS_HANJA = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const BRANCHES = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
+const BRANCHES_HANJA = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+const STEM_ELEMENT = ['목','목','화','화','토','토','금','금','수','수'];
+const BRANCH_ELEMENT = ['수','토','목','목','토','화','화','토','금','금','토','수'];
+const ELEMENT_HANJA = { 목: '木', 화: '火', 토: '土', 금: '金', 수: '水' };
+const ELEMENT_NUMBERS = { 수: [1, 6], 화: [2, 7], 목: [3, 8], 금: [4, 9], 토: [5, 0] };
+const ELEMENT_FLAVOR = {
+  목: '성장과 확장의 기운이 강해 새로운 도전에 유리한 흐름이에요',
+  화: '열정과 표현력이 돋보이고 추진력이 강한 흐름이에요',
+  토: '안정과 신뢰를 바탕으로 꾸준히 쌓아가는 흐름이에요',
+  금: '결단력과 원칙이 뚜렷해 정리와 결실에 유리한 흐름이에요',
+  수: '지혜와 유연함으로 변화에 잘 적응하는 흐름이에요'
+};
+
+function mod(n, m) { return ((n % m) + m) % m; }
+
+function yearGanZhi(y) {
+  return { stem: mod(y - 4, 10), branch: mod(y - 4, 12) };
+}
+
+function monthBranchIndex(month, day) {
+  const bounds = [
+    { m: 1, d: 6, b: 1 }, { m: 2, d: 4, b: 2 }, { m: 3, d: 6, b: 3 }, { m: 4, d: 5, b: 4 },
+    { m: 5, d: 6, b: 5 }, { m: 6, d: 6, b: 6 }, { m: 7, d: 7, b: 7 }, { m: 8, d: 8, b: 8 },
+    { m: 9, d: 8, b: 9 }, { m: 10, d: 8, b: 10 }, { m: 11, d: 7, b: 11 }, { m: 12, d: 7, b: 0 }
+  ];
+  let result = 0;
+  for (const b of bounds) {
+    if (month > b.m || (month === b.m && day >= b.d)) result = b.b;
+  }
+  return result;
+}
+
+function monthStemIndex(yearStemIdx, monthBranchIdx) {
+  const startTable = [2, 4, 6, 8, 0];
+  const start = startTable[mod(yearStemIdx, 5)];
+  const order = mod(monthBranchIdx - 2, 12);
+  return mod(start + order, 10);
+}
+
+function dayGanZhi(y, m, d) {
+  const epoch = Date.UTC(1900, 0, 1); // 1900-01-01 = 갑술일 (60갑자 index 10)
+  const target = Date.UTC(y, m - 1, d);
+  const days = Math.round((target - epoch) / 86400000);
+  const idx = mod(10 + days, 60);
+  return { stem: mod(idx, 10), branch: mod(idx, 12) };
+}
+
+function hourBranchIndex(hour) {
+  return mod(Math.floor((hour + 1) / 2), 12);
+}
+function hourStemIndex(dayStemIdx, hourBranchIdx) {
+  const startTable = [0, 2, 4, 6, 8];
+  const start = startTable[mod(dayStemIdx, 5)];
+  return mod(start + hourBranchIdx, 10);
+}
+
+function sajuYear(y, m, d) {
+  if (m < 2 || (m === 2 && d < 4)) return y - 1;
+  return y;
+}
+
+function computeSaju(dateStr, timeStr, timeUnknown) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const sy = sajuYear(y, m, d);
+  const year = yearGanZhi(sy);
+  const mBranch = monthBranchIndex(m, d);
+  const mStem = monthStemIndex(year.stem, mBranch);
+  const day = dayGanZhi(y, m, d);
+
+  let hour = null;
+  if (!timeUnknown && timeStr) {
+    const h = parseInt(timeStr.split(':')[0], 10);
+    const hBranch = hourBranchIndex(h);
+    const hStem = hourStemIndex(day.stem, hBranch);
+    hour = { stem: hStem, branch: hBranch };
+  }
+
+  const pillars = [
+    { stem: year.stem, branch: year.branch },
+    { stem: mStem, branch: mBranch },
+    { stem: day.stem, branch: day.branch }
+  ];
+  if (hour) pillars.push(hour);
+
+  const counts = { 목: 0, 화: 0, 토: 0, 금: 0, 수: 0 };
+  pillars.forEach(p => {
+    counts[STEM_ELEMENT[p.stem]]++;
+    counts[BRANCH_ELEMENT[p.branch]]++;
+  });
+
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const dominant = sorted[0][0];
+  const weakest = sorted[sorted.length - 1][0];
+
+  return {
+    year: { stem: year.stem, branch: year.branch },
+    month: { stem: mStem, branch: mBranch },
+    day: { stem: day.stem, branch: day.branch },
+    hour,
+    counts, dominant, weakest
+  };
+}
+
+function pillarText(p) {
+  return `${STEMS[p.stem]}${BRANCHES[p.branch]}(${STEMS_HANJA[p.stem]}${BRANCHES_HANJA[p.branch]})`;
+}
+
+function buildAnalysisMessage(saju) {
+  const y = pillarText(saju.year), mo = pillarText(saju.month), da = pillarText(saju.day);
+  const ho = saju.hour ? pillarText(saju.hour) : null;
+  let text = `사주 네 기둥을 뽑아봤어요.<br>`;
+  text += `년주 ${y} &middot; 월주 ${mo} &middot; 일주 ${da}` + (ho ? ` &middot; 시주 ${ho}` : ' (시간 미상)') + `<br><br>`;
+  text += `오행 중 <b>${saju.dominant}(${ELEMENT_HANJA[saju.dominant]})</b> 기운이 가장 강하게 나타나요. ${ELEMENT_FLAVOR[saju.dominant]}.<br>`;
+  text += `상대적으로 <b>${saju.weakest}(${ELEMENT_HANJA[saju.weakest]})</b> 기운이 부족해서, 이를 보완하는 번호도 함께 섞어 추천해드릴게요.<br><br>`;
+  text += `<span style="color:var(--muted);font-size:12px;">* 전통 사주 이론을 바탕으로 한 재미로 즐기는 콘텐츠입니다.</span>`;
+  return text;
+}
+
+function buildWeights(saju) {
+  const weights = new Array(45).fill(1);
+  for (let n = 1; n <= 45; n++) {
+    const lastDigit = n % 10;
+    let fam = null;
+    for (const [el, digits] of Object.entries(ELEMENT_NUMBERS)) {
+      if (digits.includes(lastDigit)) fam = el;
+    }
+    if (fam === saju.dominant) weights[n - 1] = 4;
+    else if (fam === saju.weakest) weights[n - 1] = 2.5;
+  }
+  return weights;
+}
+
+/* ---------- chat UI wiring ---------- */
+const chatOverlay = document.getElementById('chatOverlay');
+const chatMessages = document.getElementById('chatMessages');
+const chatOpenBtn = document.getElementById('chatOpenBtn');
+const chatCloseBtn = document.getElementById('chatCloseBtn');
+const chatSubmitBtn = document.getElementById('chatSubmitBtn');
+const birthDateInput = document.getElementById('birthDate');
+const birthTimeInput = document.getElementById('birthTime');
+const timeUnknownInput = document.getElementById('timeUnknown');
+
+function addBotMessage(html) {
+  const el = document.createElement('div');
+  el.className = 'msg bot';
+  el.innerHTML = html;
+  chatMessages.appendChild(el);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return el;
+}
+
+async function getAnalysisText(saju) {
+  try {
+    const res = await fetch('/api/saju', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        yearPillar: pillarText(saju.year),
+        monthPillar: pillarText(saju.month),
+        dayPillar: pillarText(saju.day),
+        hourPillar: saju.hour ? pillarText(saju.hour) : null,
+        dominant: saju.dominant,
+        weakest: saju.weakest
+      })
+    });
+    if (!res.ok) throw new Error('api error');
+    const data = await res.json();
+    if (!data.analysis) throw new Error('empty analysis');
+    return `${data.analysis.replace(/\n/g, '<br>')}<br><br><span style="color:var(--muted);font-size:12px;">* AI가 생성한 재미 콘텐츠입니다.</span>`;
+  } catch (err) {
+    return buildAnalysisMessage(saju);
+  }
+}
+function addUserMessage(text) {
+  const el = document.createElement('div');
+  el.className = 'msg user';
+  el.textContent = text;
+  chatMessages.appendChild(el);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+chatOpenBtn.addEventListener('click', () => {
+  chatOverlay.classList.add('open');
+  if (!chatMessages.children.length) {
+    addBotMessage('안녕하세요! M 챗봇이에요.<br>생년월일과 태어난 시간을 알려주시면 사주를 분석해서 행운 번호를 추천해드릴게요.');
+  }
+});
+chatCloseBtn.addEventListener('click', () => chatOverlay.classList.remove('open'));
+
+chatSubmitBtn.addEventListener('click', async () => {
+  const dateStr = birthDateInput.value;
+  const timeUnknown = timeUnknownInput.checked;
+  const timeStr = birthTimeInput.value;
+
+  if (!dateStr) {
+    addBotMessage('생년월일을 먼저 선택해주세요.');
+    return;
+  }
+  if (!timeUnknown && !timeStr) {
+    addBotMessage('태어난 시간을 입력하거나, 모르시면 "태어난 시간 모름"에 체크해주세요.');
+    return;
+  }
+
+  addUserMessage(`${dateStr}${timeUnknown ? ' (시간 모름)' : ' ' + timeStr}`);
+  chatSubmitBtn.disabled = true;
+
+  const saju = computeSaju(dateStr, timeStr, timeUnknown);
+  await wait(400);
+  const loadingMsg = addBotMessage('사주를 분석하고 있어요...');
+  const analysisHtml = await getAnalysisText(saju);
+  loadingMsg.innerHTML = analysisHtml;
+  await wait(700);
+  addBotMessage('사주에 맞는 번호를 지금 바로 추첨할게요! 화면 위쪽을 확인해주세요.');
+
+  const weights = buildWeights(saju);
+  await wait(900);
+  chatOverlay.classList.remove('open');
+  ballsEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  await runDraw(weights);
+
+  chatSubmitBtn.disabled = false;
 });
 </script>
 </body>
